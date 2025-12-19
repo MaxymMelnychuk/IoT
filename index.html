@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Music Control</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: #121212;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  .container {
+    background: #1E1E1E;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+  }
+
+  h1 {
+    font-weight: 700;
+    margin-bottom: 20px;
+    font-size: 1.8em;
+    letter-spacing: 1px;
+  }
+
+  .status {
+    font-weight: 600;
+    margin: 15px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .led {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: red;
+    box-shadow: 0 0 5px rgba(255,0,0,0.7);
+  }
+
+  .led.green {
+    background: #4CAF50;
+    box-shadow: 0 0 10px rgba(76,175,80,0.7);
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin-top: 20px;
+  }
+
+  button {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 0;
+    font-size: 1em;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: #333;
+    color: #fff;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  }
+
+  button:hover {
+    background: #444;
+  }
+
+  button:active {
+    transform: scale(0.97);
+  }
+
+  button.on {
+    background: #4CAF50;
+  }
+
+  button.off {
+    background: #F44336;
+  }
+
+  button.next {
+    background: #2196F3;
+  }
+
+  .song-list {
+    margin-top: 20px;
+    font-size: 0.95em;
+    color: #ccc;
+    max-height: 100px;
+    overflow-y: auto;
+    text-align: left;
+    padding-left: 10px;
+  }
+
+  .song-item {
+    padding: 4px 0;
+  }
+
+  .song-item.active {
+    color: #4CAF50;
+    font-weight: 600;
+  }
+
+  svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Music Control</h1>
+  <div class="status">
+    <div class="led" id="led"></div>
+    <div id="statusText">Musique arrêtée</div>
+  </div>
+  <div class="buttons">
+    <button id="on" class="on">
+      <svg viewBox="0 0 512 512"><path d="M256 0C114.836 0 0 114.836 0 256s114.836 256 256 256 256-114.836 256-256S397.164 0 256 0zm0 472c-119.103 0-216-96.897-216-216S136.897 40 256 40s216 96.897 216 216-96.897 216-216 216z"/><path d="M256 120c-9.941 0-18 8.059-18 18v116h-116c-9.941 0-18 8.059-18 18s8.059 18 18 18h134c9.941 0 18-8.059 18-18V138c0-9.941-8.059-18-18-18z"/></svg>
+      ON
+    </button>
+    <button id="off" class="off">
+      <svg viewBox="0 0 512 512"><path d="M256 0C114.836 0 0 114.836 0 256s114.836 256 256 256 256-114.836 256-256S397.164 0 256 0zm0 472c-119.103 0-216-96.897-216-216S136.897 40 256 40s216 96.897 216 216-96.897 216-216 216z"/><path d="M312.485 199.515c-7.81-7.81-20.474-7.81-28.284 0l-28.284 28.284-28.284-28.284c-7.81-7.81-20.474-7.81-28.284 0s-7.81 20.474 0 28.284l28.284 28.284-28.284 28.284c-7.81 7.81-7.81 20.474 0 28.284s20.474 7.81 28.284 0l28.284-28.284 28.284 28.284c7.81 7.81 20.474 7.81 28.284 0s7.81-20.474 0-28.284l-28.284-28.284 28.284-28.284c7.81-7.81 7.81-20.474 0-28.284z"/></svg>
+      OFF
+    </button>
+    <button id="next" class="next">
+      <svg viewBox="0 0 512 512"><path d="M256 0c-141.164 0-256 114.836-256 256s114.836 256 256 256 256-114.836 256-256S397.164 0 256 0zm0 472c-119.103 0-216-96.897-216-216S136.897 40 256 40s216 96.897 216 216-96.897 216-216 216z"/><path d="M352 128l-160 128 160 128V128z"/></svg>
+      NEXT
+    </button>
+  </div>
+  <div class="song-list" id="songList">
+    <div class="song-item" data-index="0">Frère Jacques</div>
+    <div class="song-item" data-index="1">Mary Had a Little Lamb</div>
+    <div class="song-item" data-index="2">Red Sun in the Sky</div>
+  </div>
+</div>
+
+<script>
+const onBtn = document.getElementById('on');
+const offBtn = document.getElementById('off');
+const nextBtn = document.getElementById('next');
+const statusText = document.getElementById('statusText');
+const led = document.getElementById('led');
+const songList = document.getElementById('songList').children;
+
+function updateSongUI(current) {
+  for(let item of songList) {
+    if(parseInt(item.dataset.index) === current) {
+      item.classList.add('active');
+    } else {
+      item.classList.remove('active');
+    }
+  }
+}
+
+onBtn.addEventListener('click', () => {
+  fetch('/music/on')
+  .then(r => r.json())
+  .then(data => {
+    statusText.textContent = "Musique en cours";
+    led.classList.add('green');
+    updateSongUI(data.song);
+  })
+  .catch(e => console.error(e));
+});
+
+offBtn.addEventListener('click', () => {
+  fetch('/music/off')
+  .then(r => r.json())
+  .then(data => {
+    statusText.textContent = "Musique arrêtée";
+    led.classList.remove('green');
+  })
+  .catch(e => console.error(e));
+});
+
+nextBtn.addEventListener('click', () => {
+  fetch('/music/next')
+  .then(r => r.json())
+  .then(data => {
+    statusText.textContent = "Chanson suivante";
+    updateSongUI(data.song);
+  })
+  .catch(e => console.error(e));
+});
+
+// Optionnel : mise à jour auto toutes les 2s
+setInterval(() => {
+  fetch('/music/status')
+  .then(r => r.json())
+  .then(data => {
+    if(data.status === 'playing') {
+      statusText.textContent = "Musique en cours";
+      led.classList.add('green');
+    } else {
+      statusText.textContent = "Musique arrêtée";
+      led.classList.remove('green');
+    }
+    updateSongUI(data.song);
+  }).catch(()=>{});
+}, 2000);
+</script>
+</body>
+</html>
