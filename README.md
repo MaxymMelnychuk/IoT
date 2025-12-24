@@ -31,4 +31,4 @@ Ce projet est un **système IoT pour contrôler et visualiser la musique** à l'
 
 1. Cloner ce dépôt :
    ```bash
-   git clone 
+   git clone https://github.com/MaxymMelnychuk/IoT.git
